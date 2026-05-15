@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEVOPS® | The Standard</title>
+    
+    <!-- Core Frameworks -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Light Theme Defaults */
+            --primary: #000000;
+            --accent: #0071e3;
+            --bg-body: #fafafa;
+            --card-bg: #ffffff;
+            --text-main: #1d1d1f;
+            --text-secondary: #86868b;
+            --border-color: rgba(0,0,0,0.08);
+            --card-radius: 28px;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --glass: rgba(255, 255, 255, 0.7);
+        }
+
+        [data-theme="dark"] {
+            --primary: #ffffff;
+            --accent: #0a84ff;
+            --bg-body: #000000;
+            --card-bg: #1c1c1e;
+            --text-main: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --border-color: rgba(255,255,255,0.1);
+            --glass: rgba(28, 28, 30, 0.7);
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-body); 
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Futuristic Background Grid */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(var(--border-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* Smooth Scroll Indicator */
+        #scroll-tracker {
+            position: fixed;
+            top: 0; left: 0; width: 0%; height: 4px;
+            background: linear-gradient(to right, var(--accent), #5ac8fa);
+            z-index: 9999;
+            transition: width 0.2s ease-out;
+        }
+
+        /* Ultra-Minimalist Navbar */
+        .navbar {
+            background: var(--glass);
+            backdrop-filter: blur(25px) saturate(200%);
+            -webkit-backdrop-filter: blur(25px) saturate(200%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            transition: var(--transition);
+        }
+
+        .navbar-brand {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 1.4rem;
+            letter-spacing: -1px;
+            color: var(--primary) !important;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: var(--transition);
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            transform: rotate(20deg);
+        }
+
+        /* Hero: Minimalist Authority */
+        .hero-section {
+            padding: 180px 0 100px;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 800;
+            letter-spacing: -5px;
+            line-height: 0.9;
+            margin-bottom: 24px;
+            transition: var(--transition);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            font-weight: 400;
+        }
+
+        /* Product Cards */
+        .product-grid { padding-bottom: 100px; }
+
+        .item-card {
+            background: var(--card-bg);
+            border-radius: var(--card-radius);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            height: 100%;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .item-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.1);
+            border-color: var(--accent);
+        }
+
+        /* Magnetic Glow Effect */
+        .glow-effect {
+            position: absolute;
+            width: 100px; height: 100px;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 1;
+            filter: blur(40px);
+        }
+        .item-card:hover .glow-effect { opacity: 0.2; }
+
+        .image-host {
+            width: 100%;
+            aspect-ratio: 1/1.2;
+            border-radius: calc(var(--card-radius) - 6px);
+            overflow: hidden;
+            background: var(--bg-body);
+            position: relative;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .item-card:hover .product-img { transform: scale(1.08); }
+
+        .admin-ghost-tools {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+        }
+        .item-card:hover .admin-ghost-tools { opacity: 1; }
+
+        .btn-circle {
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-main); transition: 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .btn-circle:hover { transform: scale(1.1); color: var(--accent); border-color: var(--accent); }
+
+        .scarcity-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #ff3b30;
+            background: rgba(255, 59, 48, 0.1);
+            padding: 4px 12px;
+            border-radius: 100px;
+            display: inline-block;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .stock-count {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        /* Add to Bag: Conversion Focus */
+        .cta-button {
+            background: var(--primary);
+            color: var(--bg-body);
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            transform: scale(0.98);
+            box-shadow: 0 0 20px rgba(0, 113, 227, 0.3);
+        }
+
+        /* Cart Drawer */
+        .cart-overlay {
+            position: fixed;
+            top: 0; right: -500px;
+            width: 100%; max-width: 480px;
+            height: 100vh;
+            background: var(--card-bg);
+            z-index: 3000;
+            transition: var(--transition);
+            box-shadow: -30px 0 90px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column;
+            border-left: 1px solid var(--border-color);
+        }
+        .cart-overlay.active { right: 0; }
+
+        .cart-header { padding: 30px; border-bottom: 1px solid var(--border-color); }
+        .cart-body { flex: 1; padding: 30px; overflow-y: auto; }
+        .cart-footer { padding: 30px; background: var(--bg-body); border-top: 1px solid var(--border-color); }
+
+        /* Payment Methods */
+        .payment-methods {
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            background: var(--card-bg);
+        }
+
+        .payment-option:hover {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: white;
+        }
+
+        .payment-option input[type="radio"]:checked + label {
+            color: var(--accent);
+        }
+
+        .payment-icons img {
+            height: 18px;
+            margin-left: 10px;
+            filter: invert(var(--invert-icons));
+        }
+
+        .bank-details-box {
+            background: var(--bg-body);
+            border: 1px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 8px;
+            font-size: 0.75rem;
+            display: none;
+        }
+
+        /* Theme-aware inversion for SVGs */
+        [data-theme="dark"] .payment-icons img { filter: invert(1); }
+
+        #notification-toast {
+            position: fixed;
+            bottom: 30px; left: 30px;
+            background: var(--primary); color: var(--bg-body);
+            padding: 14px 28px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            z-index: 5000;
+            display: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            font-weight: 600;
+        }
+
+        .modal-content { 
+            background: var(--card-bg); 
+            color: var(--text-main); 
+            border-radius: 35px; 
+            border: 1px solid var(--border-color); 
+            padding: 15px; 
+        }
+        .form-control-premium {
+            background: var(--bg-body); 
+            border: 1px solid var(--border-color); 
+            color: var(--text-main);
+            padding: 15px; 
+            border-radius: 18px;
+            transition: 0.3s;
+        }
+        .form-control-premium:focus {
+            background: var(--card-bg);
+            border-color: var(--accent);
+            box-shadow: none;
+            color: var(--text-main);
+        }
+
+    </style>
+</head>
+<body data-theme="light">
+
+    <div id="scroll-tracker"></div>
+
+    <!-- Live Social Proof -->
+    <div id="notification-toast" class="animate__animated animate__fadeInUp">
+        <i class="fas fa-satellite-dish me-2"></i> <span id="toast-msg">Alex in Oslo just secured the Tech Jacket!</span>
+    </div>
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container px-4">
+            <a class="navbar-brand" href="#">DEVOPS.®</a>
+            <div class="d-flex align-items-center gap-2">
+                <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="btn btn-outline-dark rounded-pill px-4 py-2 small fw-700 d-none d-md-block" style="border-color: var(--border-color); color: var(--text-main)" data-bs-toggle="modal" data-bs-target="#addModal">
+                    New Entry
+                </button>
+                <button class="btn-circle position-relative" onclick="toggleCart()">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span id="cart-dot" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary d-none">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="animate__animated animate__fadeInDown">
+                <span class="scarcity-label">Next Gen Framework</span>
+                <h1 class="hero-title">Wear the <br><span style="background: linear-gradient(90deg, var(--accent), #5ac8fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Interface.</span></h1>
+                <p class="hero-subtitle">High-performance textiles integrated with modular designs for the modern architect.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Grid -->
+    <div class="container product-grid">
+        <div class="row g-5">
+            {% for item in items %}
+            <div class="col-lg-4 col-md-6">
+                <div class="item-card animate__animated animate__fadeInUp" style="animation-delay: {{ loop.index0 * 0.1 }}s">
+                    <div class="glow-effect"></div>
+                    <!-- Admin Tools -->
+                    <div class="admin-ghost-tools">
+                        <button class="btn-circle" onclick="openEdit('{{ item.id }}', '{{ item.name|replace("'", "\\'") }}', '{{ item.price }}', '{{ item.image }}')">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <a href="{{ url_for('delete_product', id=item.id) }}" class="btn-circle text-danger">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+
+                    <div class="image-host">
+                        <img src="{{ item.image }}" class="product-img" alt="{{ item.name }}" onerror="this.src='https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800'">
+                    </div>
+
+                    <div class="p-3" style="position: relative; z-index: 2;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h3 class="h5 fw-800 mb-1">{{ item.name }}</h3>
+                                <div class="scarcity-label" style="background: var(--bg-body); border: 1px solid var(--border-color); color: var(--text-secondary)">v{{ range(1, 4)|random }}.{{ range(0, 9)|random }}.{{ range(0, 9)|random }} Patch</div>
+                                <div class="stock-count"><i class="fas fa-microchip me-1"></i> Available: <span id="stock-val-{{ loop.index0 }}">--</span></div>
+                            </div>
+                            <span class="h5 fw-800">${{ "%.2f"|format(item.price|float) }}</span>
+                        </div>
+                        
+                        <button class="cta-button" onclick="addToBag('{{ item.name|replace("'", "\\'") }}', {{ item.price }}, '{{ item.image }}', 'stock-val-{{ loop.index0 }}')">
+                            Initialize Purchase
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Additional Catalog Products -->
+            <div class="col-lg-4 col-md-6">
+                <div class="item-card animate__animated animate__fadeInUp">
+                    <div class="glow-effect"></div>
+                    <div class="image-host">
+                        <img src="https://images.unsplash.com/photo-1584030373081-f37b7bb4fa8e?auto=format&fit=crop&w=800" class="product-img" alt="Neuro-Link Headset">
+                    </div>
+                    <div class="p-3" style="position: relative; z-index: 2;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h3 class="h5 fw-800 mb-1">Neuro-Link V4</h3>
+                                <div class="scarcity-label">Limited Edition</div>
+                                <div class="stock-count"><i class="fas fa-brain me-1"></i> Sync Speed: 400Gbps</div>
+                            </div>
+                            <span class="h5 fw-800">$1,499.00</span>
+                        </div>
+                        <button class="cta-button" onclick="addToBag('Neuro-Link V4', 1499, 'https://images.unsplash.com/photo-1584030373081-f37b7bb4fa8e?auto=format&fit=crop&w=800', 'stock-dummy-1')">Initialize Purchase</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="item-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                    <div class="glow-effect"></div>
+                    <div class="image-host">
+                        <img src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?auto=format&fit=crop&w=800" class="product-img" alt="Holographic Slate">
+                    </div>
+                    <div class="p-3" style="position: relative; z-index: 2;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h3 class="h5 fw-800 mb-1">Holoslate Air</h3>
+                                <div class="scarcity-label" style="background: rgba(0, 113, 227, 0.1); color: var(--accent)">Standard Asset</div>
+                                <div class="stock-count"><i class="fas fa-vector-square me-1"></i> Resolution: 16K Nano</div>
+                            </div>
+                            <span class="h5 fw-800">$890.00</span>
+                        </div>
+                        <button class="cta-button" onclick="addToBag('Holoslate Air', 890, 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?auto=format&fit=crop&w=800', 'stock-dummy-2')">Initialize Purchase</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="item-card animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
+                    <div class="glow-effect"></div>
+                    <div class="image-host">
+                        <img src="https://images.unsplash.com/photo-1614850715649-1d0106293bd1?auto=format&fit=crop&w=800" class="product-img" alt="Cyberpunk Glider">
+                    </div>
+                    <div class="p-3" style="position: relative; z-index: 2;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h3 class="h5 fw-800 mb-1">Vector Glider</h3>
+                                <div class="scarcity-label">Pre-Order</div>
+                                <div class="stock-count"><i class="fas fa-wind me-1"></i> Range: 200km</div>
+                            </div>
+                            <span class="h5 fw-800">$24,000.00</span>
+                        </div>
+                        <button class="cta-button" onclick="addToBag('Vector Glider', 24000, 'https://images.unsplash.com/photo-1614850715649-1d0106293bd1?auto=format&fit=crop&w=800', 'stock-dummy-3')">Initialize Purchase</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg">
+                <form action="/add" method="POST">
+                    <div class="modal-header border-0">
+                        <h4 class="fw-800 mb-0">Commit New Asset</h4>
+                        <button type="button" class="btn-close" style="filter: invert(var(--invert-icons))" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" name="name" class="form-control form-control-premium mb-3" placeholder="Entry Label" required>
+                        <input type="number" step="0.01" name="price" class="form-control form-control-premium mb-3" placeholder="Credit Value" required>
+                        <input type="text" name="image" class="form-control form-control-premium" placeholder="Asset URL">
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="submit" class="cta-button">Push to Main</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div id="cartOverlay" class="cart-overlay">
+        <div class="cart-header d-flex justify-content-between align-items-center">
+            <h3 class="fw-800 mb-0">Active Sessions</h3>
+            <button class="btn-circle" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-body">
+            <div id="cart-list"></div>
+
+            <div class="payment-methods mt-4">
+                <h6 class="fw-800 mb-3 small opacity-50 text-uppercase">Payment Gateway</h6>
+                
+                <!-- Apple Pay -->
+                <div class="payment-option">
+                    <input type="radio" name="payment" id="apple" checked class="me-3" onchange="toggleBankDetails()">
+                    <label for="apple" class="fw-700 flex-grow-1 d-flex justify-content-between align-items-center">
+                        Apple Pay <span class="payment-icons"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay"></span>
+                    </label>
+                </div>
+
+                <!-- Direct Bank Transfer -->
+                <div class="payment-option">
+                    <input type="radio" name="payment" id="bank" class="me-3" onchange="toggleBankDetails()">
+                    <label for="bank" class="fw-700 flex-grow-1 d-flex justify-content-between align-items-center">
+                        Bank Transfer <span class="payment-icons"><i class="fas fa-university"></i></span>
+                    </label>
+                </div>
+                <div id="bank-info" class="bank-details-box animate__animated animate__fadeIn">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Institution:</span> <strong>Global Tech Bank</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>IBAN:</span> <strong>GB99 DEVO 8000 1234 5678</strong>
+                    </div>
+                    <div class="text-muted" style="font-size: 0.65rem">Transfer must include session ID in reference.</div>
+                </div>
+
+                <!-- Web3 -->
+                <div class="payment-option mt-2">
+                    <input type="radio" name="payment" id="crypto" class="me-3" onchange="toggleBankDetails()">
+                    <label for="crypto" class="fw-700 flex-grow-1 d-flex justify-content-between align-items-center">
+                        Web3 / Crypto <span class="payment-icons"><i class="fab fa-ethereum"></i></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted fw-600">Protocol Value</span>
+                <span class="fw-800" id="subtotal">$0.00</span>
+            </div>
+            <button class="cta-button py-4" onclick="handleCheckout()">
+                Finalize Transmission <i class="fas fa-bolt ms-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let cart = JSON.parse(localStorage.getItem('devops_cart')) || [];
+        const themeBtn = document.getElementById('theme-btn');
+
+        // Theme Engine
+        function toggleTheme() {
+            const body = document.body;
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('devops_theme', newTheme);
+            
+            themeBtn.innerHTML = newTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        }
+
+        // Load Saved Theme
+        if (localStorage.getItem('devops_theme') === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        // Toggle Bank Details UI
+        function toggleBankDetails() {
+            const bankRadio = document.getElementById('bank');
+            const bankInfo = document.getElementById('bank-info');
+            bankInfo.style.display = bankRadio.checked ? 'block' : 'none';
+        }
+
+        // Magnetic Hover Effect
+        function initMagneticEffect() {
+            document.querySelectorAll('.item-card').forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const glow = card.querySelector('.glow-effect');
+                    if (glow) {
+                        glow.style.left = `${x - 50}px`;
+                        glow.style.top = `${y - 50}px`;
+                    }
+                });
+            });
+        }
+
+        // Initialize Stocks
+        function initStocks() {
+            document.querySelectorAll('[id^="stock-val-"], [id^="stock-dummy-"]').forEach(el => {
+                el.innerText = Math.floor(Math.random() * 20) + 5;
+            });
+        }
+
+        // Social Proof Engine
+        const names = ["Arakawa", "Elena", "Klaus", "Zion", "Maya", "Kenji", "Sora"];
+        const cities = ["Neo Tokyo", "Zion", "New Berlin", "Silicon Valley", "Moon Base Alpha"];
+
+        function triggerSocialProof() {
+            const toast = document.getElementById('notification-toast');
+            const name = names[Math.floor(Math.random() * names.length)];
+            const city = cities[Math.floor(Math.random() * cities.length)];
+
+            document.getElementById('toast-msg').innerText = `${name} (${city}) just verified a purchase.`;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.classList.add('animate__fadeOutDown');
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                    toast.classList.remove('animate__fadeOutDown');
+                }, 1000);
+            }, 5000);
+        }
+
+        function toggleCart() {
+            document.getElementById('cartOverlay').classList.toggle('active');
+            renderCart();
+        }
+
+        function addToBag(name, price, image, stockId) {
+            const stockEl = document.getElementById(stockId);
+            let currentStock = stockEl ? parseInt(stockEl.innerText) : 99;
+            
+            if(currentStock > 0) {
+                cart.push({ name, price: parseFloat(price), image });
+                localStorage.setItem('devops_cart', JSON.stringify(cart));
+                if (stockEl) stockEl.innerText = currentStock - 1;
+                updateCartBadge();
+                toggleCart();
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('devops_cart', JSON.stringify(cart));
+            renderCart();
+            updateCartBadge();
+        }
+
+        function updateCartBadge() {
+            const dot = document.getElementById('cart-dot');
+            dot.innerText = cart.length;
+            dot.classList.toggle('d-none', cart.length === 0);
+        }
+
+        function renderCart() {
+            const list = document.getElementById('cart-list');
+            const sub = document.getElementById('subtotal');
+            
+            if(cart.length === 0) {
+                list.innerHTML = `<div class="text-center py-5 opacity-50"><p>No active sessions found.</p></div>`;
+                sub.innerText = "$0.00";
+                return;
+            }
+
+            list.innerHTML = cart.map((item, i) => `
+                <div class="d-flex align-items-center mb-4 animate__animated animate__fadeInRight" style="animation-delay: ${i*0.1}s">
+                    <img src="${item.image}" style="width: 70px; height: 90px; object-fit: cover; border-radius: 12px;">
+                    <div class="ms-3 flex-grow-1">
+                        <div class="d-flex justify-content-between">
+                            <span class="fw-800 small">${item.name}</span>
+                            <button class="btn btn-sm text-danger p-0" onclick="removeFromCart(${i})"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                        <div class="fw-700 text-muted small mt-1">$${item.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((acc, curr) => acc + curr.price, 0);
+            sub.innerText = `$${total.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+        }
+
+        function handleCheckout() {
+            if(cart.length === 0) return;
+            const method = document.querySelector('input[name="payment"]:checked').id;
+            const btn = event.currentTarget;
+            btn.innerHTML = `<i class="fas fa-sync fa-spin"></i> Initializing Gateway...`;
+            
+            setTimeout(() => {
+                if (method === 'bank') {
+                    alert(`Pending: Please complete the transfer to the IBAN provided. Your order is reserved for 24 hours.`);
+                } else {
+                    alert(`Handshake complete. Order confirmed via ${method.toUpperCase()}. Check your digital wallet.`);
+                }
+                btn.innerHTML = `Finalize Transmission <i class="fas fa-bolt ms-2"></i>`;
+            }, 2000);
+        }
+
+        function openEdit(id, name, price, image) {
+            const form = document.getElementById('editForm');
+            if (form) {
+                form.action = '/edit/' + id;
+                document.getElementById('edit-name').value = name;
+                document.getElementById('edit-price').value = price;
+                document.getElementById('edit-image').value = image;
+                new bootstrap.Modal(document.getElementById('editModal')).show();
+            }
+        }
+
+        window.onload = () => {
+            updateCartBadge();
+            initStocks();
+            initMagneticEffect();
+            setInterval(triggerSocialProof, 15000);
+        };
+    </script>
+</body>
+</html>
