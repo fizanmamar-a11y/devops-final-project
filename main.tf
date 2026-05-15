@@ -7,62 +7,36 @@ terraform {
   }
 }
 
-provider "docker" {}
+# Provider configuration for Docker on Windows
+provider "docker" {
+  host = "npipe:////.//pipe//docker_engine"
+}
 
+# 1. Build the Docker image from your local Dockerfile
 resource "docker_image" "app_image" {
-  name = "my-devops-app:latest"
+  name = "devops-flagship-shop:latest"
   build {
-    context = "."
+    context    = "."
+    dockerfile = "Dockerfile"
   }
 }
 
-resource "docker_container" "app_container" {
+# 2. Deploy the container using the built image
+resource "docker_container" "shop_container" {
   image = docker_image.app_image.image_id
-  name  = "devops_final_prod"
+  name  = "devops_production_environment"
+
   ports {
     internal = 5000
     external = 8080
   }
+
+  # Ensure the container stays running
+  restart = "always"
 }
 
-/*
-COMMANDS TO FIX YOUR ERRORS (Copy-paste these into your VS Code terminal):
-
-1. FIX THE DIRECTORY ERROR:
-   New-Item -ItemType Directory -Path "app", "docker", "terraform", "scripts" -Force
-
-2. CONFIGURE YOUR GIT IDENTITY (Required for the 'Author identity unknown' error):
-   git config --local user.email "your@email.com"
-   git config --local user.name "Your Name"
-
-3. RE-RUN THE FILE CREATION (Now that directories exist):
-   @"
-   from flask import Flask, jsonify
-   app = Flask(__name__)
-   @app.route('/')
-   def home(): return jsonify({"message": "DevOps Pipeline Demo", "status": "running"})
-   @app.route('/health')
-   def health(): return jsonify({"health": "OK"}), 200
-   if __name__ == '__main__': app.run(host='0.0.0.0', port=5000)
-   "@ | Set-Content app\app.py
-
-   "Flask==2.3.0`nWerkzeug==2.3.0" | Set-Content app\requirements.txt
-
-   @"
-   FROM python:3.11-slim
-   WORKDIR /app
-   COPY requirements.txt .
-   RUN pip install --no-cache-dir -r requirements.txt
-   COPY . .
-   EXPOSE 5000
-   CMD ["python", "app.py"]
-   "@ | Set-Content docker\Dockerfile
-
-4. MAKE THE COMMIT:
-   git add .
-   git commit -m "Initial project setup with Flask app and Docker configuration"
-
-5. DEPLOY WITH TERRAFORM:
-   terraform init
-   terraform apply -auto-approve
-*/
+# 3. Output the access URL for your demo
+output "application_access_url" {
+  value       = "http://localhost:8080"
+  description = "Access your deployed Flask shop here"
+}
